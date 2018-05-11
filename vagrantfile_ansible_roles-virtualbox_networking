@@ -1,0 +1,48 @@
+# Get current role name, and append branch name and build number if set
+# Give the virtualbox name a timestamp plus random to prevent naming collision
+current_role = File.basename(File.expand_path("..", Dir.pwd))
+# Strip special characters
+current_role = current_role.gsub!(/[^0-9A-Za-z]/, '')
+# Add timestamp and random
+current_role << "-#{Time.now.to_i}-#{rand(999)}"
+
+Vagrant.configure("2") do |config|
+
+  config.vm.define "xenial", primary: true do |xenial|
+    # Virtualbox provider
+    xenial.vm.provider "virtualbox" do |v, override|
+      # Ubuntu Xenial 16.04
+      v.name = current_role
+      override.vm.box = "ubuntu/xenial64"
+      # Add extra NIC
+      v.customize ["modifyvm", :id, "--nic2", "nat"]
+      v.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+    end
+  end
+
+  config.vm.define "bionic", autostart: false do |bionic|
+    # Virtualbox provider
+    bionic.vm.provider "virtualbox" do |v, override|
+      # Ubuntu Bionic 18.04
+      v.name = current_role
+      override.vm.box = "ubuntu/bionic64"
+      v.customize ["modifyvm", :id, "--nic2", "nat"]
+      v.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+    end
+  end
+
+  config.vm.provision "ansible" do |ansible|
+    # Pull requirements
+    ansible.galaxy_roles_path = ".vagrant/roles"
+    # Include requirements if its present
+    if File.exist?('requirements.yml')
+      ansible.galaxy_role_file = "requirements.yml"
+    end
+    # Run playbook
+    ansible.playbook = "test.yml"
+    # Set verbosity
+    ansible.verbose = true
+    # Increase default threads and allow pipelining for speed
+    ansible.raw_arguments = ['-T 25', '-e pipelining=True']
+  end
+end

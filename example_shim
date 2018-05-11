@@ -1,0 +1,15 @@
+## Example shim, the contents of this should replace the traditional 'Vagrantfile'
+# Small shim to pull down a remote vagrantfile
+require 'open-uri'
+require 'openssl'
+
+# Define remote
+remote_vagrantfile = "https://raw.githubusercontent.com/bbc/rd-ansible-remote-vagrantfile/master/vagrantfile_ansible_roles"
+downloaded_vagrantfile = '.vagrant/downloaded.vagrantfile'
+
+# Download file
+download = open(remote_vagrantfile)
+IO.copy_stream(download, downloaded_vagrantfile)
+
+# Load file in
+eval File.read(downloaded_vagrantfile)
