@@ -2,7 +2,7 @@
 # Give the virtualbox name a timestamp plus random to prevent naming collision
 current_role = File.basename(File.expand_path("..", Dir.pwd))
 # Strip special characters
-current_role = current_role.gsub!(/[^0-9A-Za-z]/, '')
+current_role = current_role.gsub(/[^A-Za-z0-9 ]/, '')
 # Add timestamp and random
 current_role << "-#{Time.now.to_i}-#{rand(999)}"
 
