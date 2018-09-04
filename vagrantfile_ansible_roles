@@ -96,7 +96,7 @@ Vagrant.configure("2") do |config|
     ansible.playbook = "test.yml"
     # Set verbosity
     ansible.verbose = true
-    # Increase default threads and allow pipelining for speed
-    ansible.raw_arguments = ['-T 25', '-e pipelining=True']
+    # Increase default threads and allow pipelining for speed, load in extra variables
+    ansible.raw_arguments = ['-T 25', '-e pipelining=True'] + Shellwords.shellsplit(ENV['ANSIBLE_ARGS']) if ENV['ANSIBLE_ARGS']
   end
 end
