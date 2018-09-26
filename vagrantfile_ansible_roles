@@ -85,6 +85,32 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define "centos6", autostart: false do |centos6|
+
+    # Virtualbox provider
+    centos6.vm.provider "virtualbox" do |v, override|
+      # Centos 6
+      override.vm.box = "centos/6"
+      v.name = current_role
+    end
+
+    # Docker provider
+    centos6.vm.provider :docker do |d, override|
+      # Change docker name
+      d.name = current_role
+      # Docker runs as root
+      override.ssh.username = 'root'
+      # Systemd needs privileged
+      d.privileged = true
+      # Custom image with ssh inside
+      # Centos6
+      d.image = "boxrick/centos6-docker-ansible"
+      # We can ssh to this docker image and it stays running forever
+      d.has_ssh = true
+      d.remains_running = true
+    end
+  end
+
   config.vm.provision "ansible" do |ansible|
     # Pull requirements
     ansible.galaxy_roles_path = ".vagrant/roles"
