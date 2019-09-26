@@ -18,7 +18,14 @@ sdd = './.vagrant/sdd.vdi'
 
 Vagrant.configure("2") do |config|
 
+  # install plugins
+  config.vagrant.plugins = ['vagrant-vbguest']
+
   config.vm.define "xenial", primary: true do |xenial|
+
+    # disable auto-update on ubuntu
+    xenial.vbguest.auto_update = false
+
     # Virtualbox provider
     xenial.vm.provider "virtualbox" do |v, override|
       # Ubuntu Xenial 16.04
@@ -41,6 +48,10 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "bionic", autostart: false do |bionic|
+
+    # disable auto-update on ubuntu
+    bionic.vbguest.auto_update = false
+
     # Virtualbox provider
     bionic.vm.provider "virtualbox" do |v, override|
       # Ubuntu Bionic 18.04
