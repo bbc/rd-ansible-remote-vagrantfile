@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
       d.privileged = true
       # Custom image with ssh and systemd inside
       # Ubuntu Xenial 16.04
-      d.image = "boxrick/xenial-docker-ansible"
+      d.image = "ap-docker.virt.ch.bbc.co.uk/cans/xenial-docker-ansible"
       # We can ssh to this docker image and it stays running forever
       d.has_ssh = true
       d.remains_running = true
@@ -61,7 +61,7 @@ Vagrant.configure("2") do |config|
       d.privileged = true
       # Custom image with ssh and systemd inside
       # Ubuntu Bionic 18.04
-      d.image = "boxrick/bionic-docker-ansible"
+      d.image = "ap-docker.virt.ch.bbc.co.uk/cans/bionic-docker-ansible"
       # We can ssh to this docker image and it stays running forever
       d.has_ssh = true
       d.remains_running = true
