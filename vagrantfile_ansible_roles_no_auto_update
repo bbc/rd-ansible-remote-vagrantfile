@@ -11,7 +11,35 @@ Vagrant.configure("2") do |config|
   # install plugins
   config.vagrant.plugins = ['vagrant-vbguest']
 
-  config.vm.define "xenial", primary: true do |xenial|
+  config.vm.define "bionic", primary: true do |bionic|
+
+    # disable auto-update on ubuntu
+    bionic.vbguest.auto_update = false
+
+    # Virtualbox provider
+    bionic.vm.provider "virtualbox" do |v, override|
+      # Ubuntu Bionic 18.04
+      override.vm.box = "ubuntu/bionic64"
+      v.name = current_role
+    end
+
+    bionic.vm.provider "docker" do |d, override|
+      # Change docker name
+      d.name = current_role
+      # Docker runs as root
+      override.ssh.username = 'root'
+      # Systemd needs privileged
+      d.privileged = true
+      # Custom image with ssh and systemd inside
+      # Ubuntu Bionic 18.04
+      d.image = "ap-docker.virt.ch.bbc.co.uk/cans/bionic-docker-ansible"
+      # We can ssh to this docker image and it stays running forever
+      d.has_ssh = true
+      d.remains_running = true
+    end
+  end
+
+  config.vm.define "xenial", autostart: false do |xenial|
 
     # disable auto-update on ubuntu
     xenial.vbguest.auto_update = false
@@ -34,34 +62,6 @@ Vagrant.configure("2") do |config|
       # Custom image with ssh and systemd inside
       # Ubuntu Xenial 16.04
       d.image = "ap-docker.virt.ch.bbc.co.uk/cans/xenial-docker-ansible"
-      # We can ssh to this docker image and it stays running forever
-      d.has_ssh = true
-      d.remains_running = true
-    end
-  end
-
-  config.vm.define "bionic", autostart: false do |bionic|
-
-    # disable auto-update on ubuntu
-    bionic.vbguest.auto_update = false
-
-    # Virtualbox provider
-    bionic.vm.provider "virtualbox" do |v, override|
-      # Ubuntu Bionic 18.04
-      override.vm.box = "ubuntu/bionic64"
-      v.name = current_role
-    end
-
-    bionic.vm.provider "docker" do |d, override|
-      # Change docker name
-      d.name = current_role
-      # Docker runs as root
-      override.ssh.username = 'root'
-      # Systemd needs privileged
-      d.privileged = true
-      # Custom image with ssh and systemd inside
-      # Ubuntu Bionic 18.04
-      d.image = "ap-docker.virt.ch.bbc.co.uk/cans/bionic-docker-ansible"
       # We can ssh to this docker image and it stays running forever
       d.has_ssh = true
       d.remains_running = true

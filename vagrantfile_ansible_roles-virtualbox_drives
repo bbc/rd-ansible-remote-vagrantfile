@@ -21,16 +21,16 @@ Vagrant.configure("2") do |config|
   # install plugins
   config.vagrant.plugins = ['vagrant-vbguest']
 
-  config.vm.define "xenial", primary: true do |xenial|
+  config.vm.define "bionic", primary: true do |bionic|
 
     # disable auto-update on ubuntu
-    xenial.vbguest.auto_update = false
+    bionic.vbguest.auto_update = false
 
     # Virtualbox provider
-    xenial.vm.provider "virtualbox" do |v, override|
-      # Ubuntu Xenial 16.04
+    bionic.vm.provider "virtualbox" do |v, override|
+      # Ubuntu Bionic 18.04
       v.name = current_role
-      override.vm.box = "bento/ubuntu-16.04"
+      override.vm.box = "bento/ubuntu-18.04"
       # Add extra drives
       unless File.exist?(sdb)
         v.customize ['createhd', '--filename', sdb, '--size', 1 * 1024]
@@ -47,16 +47,16 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "bionic", autostart: false do |bionic|
+  config.vm.define "xenial", autostart: false do |xenial|
 
     # disable auto-update on ubuntu
-    bionic.vbguest.auto_update = false
+    xenial.vbguest.auto_update = false
 
     # Virtualbox provider
-    bionic.vm.provider "virtualbox" do |v, override|
-      # Ubuntu Bionic 18.04
+    xenial.vm.provider "virtualbox" do |v, override|
+      # Ubuntu Xenial 16.04
       v.name = current_role
-      override.vm.box = "bento/ubuntu-18.04"
+      override.vm.box = "bento/ubuntu-16.04"
       # Add extra drives
       unless File.exist?(sdb)
         v.customize ['createhd', '--filename', sdb, '--size', 1 * 1024]
