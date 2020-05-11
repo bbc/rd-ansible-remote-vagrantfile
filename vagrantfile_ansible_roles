@@ -50,6 +50,8 @@ Vagrant.configure("2") do |config|
       # We can ssh to this docker image and it stays running forever
       d.has_ssh = true
       d.remains_running = true
+      # Don't use proxyconf plugin
+      override.proxy.enabled = false
     end
   end
 
@@ -75,6 +77,8 @@ Vagrant.configure("2") do |config|
       # We can ssh to this docker image and it stays running forever
       d.has_ssh = true
       d.remains_running = true
+      # Don't use proxyconf plugin
+      override.proxy.enabled = false
     end
   end
 
@@ -101,6 +105,8 @@ Vagrant.configure("2") do |config|
       # We can ssh to this docker image and it stays running forever
       d.has_ssh = true
       d.remains_running = true
+      # Don't use proxyconf plugin
+      override.proxy.enabled = false
     end
   end
 
@@ -127,6 +133,8 @@ Vagrant.configure("2") do |config|
       # We can ssh to this docker image and it stays running forever
       d.has_ssh = true
       d.remains_running = true
+      # Don't use proxyconf plugin
+      override.proxy.enabled = false
     end
   end
 
@@ -153,6 +161,8 @@ Vagrant.configure("2") do |config|
       # We can ssh to this docker image and it stays running forever
       d.has_ssh = true
       d.remains_running = true
+      # Don't use proxyconf plugin
+      override.proxy.enabled = false
     end
   end
 
