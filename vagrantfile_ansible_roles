@@ -28,6 +28,60 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define "noble", autostart: false do |noble|
+
+    # Virtualbox provider
+    noble.vm.provider "virtualbox" do |v, override|
+      # Ubuntu Noble 24.04
+      override.vm.box = "ubuntu/noble64"
+      v.name = current_role
+    end
+
+    noble.vm.provider "docker" do |d, override|
+      # Change docker name
+      d.name = current_role
+      # Docker runs as root
+      override.ssh.username = 'root'
+      # Systemd needs privileged
+      d.privileged = true
+      # Custom image with ssh and systemd inside
+      # Ubuntu Noble 24.04
+      d.image = "ap-docker.virt.ch.bbc.co.uk/cans/noble-docker-ansible"
+      # We can ssh to this docker image and it stays running forever
+      d.has_ssh = true
+      d.remains_running = true
+      # Don't use proxyconf plugin
+      override.proxy.enabled = false
+    end
+  end
+
+  config.vm.define "jammy", primary: true do |jammy|
+
+    # Virtualbox provider
+    jammy.vm.provider "virtualbox" do |v, override|
+      # Ubuntu Jammy 22.04
+      override.vm.box = "ubuntu/jammy64"
+      v.name = current_role
+    end
+
+    jammy.vm.provider "docker" do |d, override|
+      # Change docker name
+      d.name = current_role
+      # Docker runs as root
+      override.ssh.username = 'root'
+      # Systemd needs privileged
+      d.privileged = true
+      # Custom image with ssh and systemd inside
+      # Ubuntu Jammy 22.04
+      d.image = "ap-docker.virt.ch.bbc.co.uk/cans/jammy-docker-ansible"
+      # We can ssh to this docker image and it stays running forever
+      d.has_ssh = true
+      d.remains_running = true
+      # Don't use proxyconf plugin
+      override.proxy.enabled = false
+    end
+  end
+
   config.vm.define "focal", autostart: false do |focal|
 
     # Virtualbox provider
@@ -47,117 +101,6 @@ Vagrant.configure("2") do |config|
       # Custom image with ssh and systemd inside
       # Ubuntu Focal 20.04
       d.image = "ap-docker.virt.ch.bbc.co.uk/cans/focal-docker-ansible"
-      # We can ssh to this docker image and it stays running forever
-      d.has_ssh = true
-      d.remains_running = true
-      # Don't use proxyconf plugin
-      override.proxy.enabled = false
-    end
-  end
-
-  config.vm.define "bionic", primary: true do |bionic|
-
-    # Virtualbox provider
-    bionic.vm.provider "virtualbox" do |v, override|
-      # Ubuntu Bionic 18.04
-      override.vm.box = "ubuntu/bionic64"
-      v.name = current_role
-    end
-
-    bionic.vm.provider "docker" do |d, override|
-      # Change docker name
-      d.name = current_role
-      # Docker runs as root
-      override.ssh.username = 'root'
-      # Systemd needs privileged
-      d.privileged = true
-      # Custom image with ssh and systemd inside
-      # Ubuntu Bionic 18.04
-      d.image = "ap-docker.virt.ch.bbc.co.uk/cans/bionic-docker-ansible"
-      # We can ssh to this docker image and it stays running forever
-      d.has_ssh = true
-      d.remains_running = true
-      # Don't use proxyconf plugin
-      override.proxy.enabled = false
-    end
-  end
-
-  config.vm.define "xenial", autostart: false do |xenial|
-
-    # Virtualbox provider
-    xenial.vm.provider "virtualbox" do |v, override|
-      # Ubuntu Xenial 16.04
-      override.vm.box = "ubuntu/xenial64"
-      v.name = current_role
-    end
-
-    # Docker provider
-    xenial.vm.provider :docker do |d, override|
-      # Change docker name
-      d.name = current_role
-      # Docker runs as root
-      override.ssh.username = 'root'
-      # Systemd needs privileged
-      d.privileged = true
-      # Custom image with ssh and systemd inside
-      # Ubuntu Xenial 16.04
-      d.image = "ap-docker.virt.ch.bbc.co.uk/cans/xenial-docker-ansible"
-      # We can ssh to this docker image and it stays running forever
-      d.has_ssh = true
-      d.remains_running = true
-      # Don't use proxyconf plugin
-      override.proxy.enabled = false
-    end
-  end
-
-  config.vm.define "centos7", autostart: false do |centos7|
-
-    # Virtualbox provider
-    centos7.vm.provider "virtualbox" do |v, override|
-      # Centos 7
-      override.vm.box = "centos/7"
-      v.name = current_role
-    end
-
-    # Docker provider
-    centos7.vm.provider :docker do |d, override|
-      # Change docker name
-      d.name = current_role
-      # Docker runs as root
-      override.ssh.username = 'root'
-      # Systemd needs privileged
-      d.privileged = true
-      # Custom image with ssh and systemd inside
-      # Centos7
-      d.image = "boxrick/centos7-docker-ansible"
-      # We can ssh to this docker image and it stays running forever
-      d.has_ssh = true
-      d.remains_running = true
-      # Don't use proxyconf plugin
-      override.proxy.enabled = false
-    end
-  end
-
-  config.vm.define "centos6", autostart: false do |centos6|
-
-    # Virtualbox provider
-    centos6.vm.provider "virtualbox" do |v, override|
-      # Centos 6
-      override.vm.box = "centos/6"
-      v.name = current_role
-    end
-
-    # Docker provider
-    centos6.vm.provider :docker do |d, override|
-      # Change docker name
-      d.name = current_role
-      # Docker runs as root
-      override.ssh.username = 'root'
-      # Systemd needs privileged
-      d.privileged = true
-      # Custom image with ssh inside
-      # Centos6
-      d.image = "boxrick/centos6-docker-ansible"
       # We can ssh to this docker image and it stays running forever
       d.has_ssh = true
       d.remains_running = true

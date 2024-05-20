@@ -28,6 +28,30 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define "noble", autostart: false do |noble|
+
+    # Virtualbox provider
+    noble.vm.provider "virtualbox" do |v, override|
+      # Ubuntu Noble 24.04
+      v.name = current_role
+      override.vm.box = "ubuntu/noble64"
+      v.customize ["modifyvm", :id, "--nic2", "nat"]
+      v.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+    end
+  end
+
+  config.vm.define "jammy", primary: true do |jammy|
+
+    # Virtualbox provider
+    jammy.vm.provider "virtualbox" do |v, override|
+      # Ubuntu Jammy 22.04
+      v.name = current_role
+      override.vm.box = "ubuntu/jammy64"
+      v.customize ["modifyvm", :id, "--nic2", "nat"]
+      v.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+    end
+  end
+
   config.vm.define "focal", autostart: false do |focal|
 
     # Virtualbox provider
@@ -35,31 +59,6 @@ Vagrant.configure("2") do |config|
       # Ubuntu Focal 20.04
       v.name = current_role
       override.vm.box = "ubuntu/focal64"
-      v.customize ["modifyvm", :id, "--nic2", "nat"]
-      v.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
-    end
-  end
-
-  config.vm.define "bionic", primary: true do |bionic|
-
-    # Virtualbox provider
-    bionic.vm.provider "virtualbox" do |v, override|
-      # Ubuntu Bionic 18.04
-      v.name = current_role
-      override.vm.box = "ubuntu/bionic64"
-      v.customize ["modifyvm", :id, "--nic2", "nat"]
-      v.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
-    end
-  end
-
-  config.vm.define "xenial", autostart: false do |xenial|
-
-    # Virtualbox provider
-    xenial.vm.provider "virtualbox" do |v, override|
-      # Ubuntu Xenial 16.04
-      v.name = current_role
-      override.vm.box = "ubuntu/xenial64"
-      # Add extra NIC
       v.customize ["modifyvm", :id, "--nic2", "nat"]
       v.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
     end

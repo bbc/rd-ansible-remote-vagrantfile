@@ -38,6 +38,52 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define "noble", autostart: false do |noble|
+
+    # Virtualbox provider
+    noble.vm.provider "virtualbox" do |v, override|
+      # Ubuntu Noble 24.04
+      v.name = current_role
+      override.vm.box = "bento/ubuntu-24.04"
+      # Add extra drives
+      unless File.exist?(sdb)
+        v.customize ['createhd', '--filename', sdb, '--size', 1 * 1024]
+      end
+      unless File.exist?(sdc)
+        v.customize ['createhd', '--filename', sdc, '--size', 1 * 1024]
+      end
+      unless File.exist?(sdd)
+        v.customize ['createhd', '--filename', sdd, '--size', 1 * 1024]
+      end
+      v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdb]
+      v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdc]
+      v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdd]
+    end
+  end
+
+  config.vm.define "jammy", primary: true do |jammy|
+
+    # Virtualbox provider
+    jammy.vm.provider "virtualbox" do |v, override|
+      # Ubuntu Jammy 22.04
+      v.name = current_role
+      override.vm.box = "bento/ubuntu-22.04"
+      # Add extra drives
+      unless File.exist?(sdb)
+        v.customize ['createhd', '--filename', sdb, '--size', 1 * 1024]
+      end
+      unless File.exist?(sdc)
+        v.customize ['createhd', '--filename', sdc, '--size', 1 * 1024]
+      end
+      unless File.exist?(sdd)
+        v.customize ['createhd', '--filename', sdd, '--size', 1 * 1024]
+      end
+      v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdb]
+      v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdc]
+      v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdd]
+    end
+  end
+
   config.vm.define "focal", autostart: false do |focal|
 
     # Virtualbox provider
@@ -45,52 +91,6 @@ Vagrant.configure("2") do |config|
       # Ubuntu Focal 20.04
       v.name = current_role
       override.vm.box = "bento/ubuntu-20.04"
-      # Add extra drives
-      unless File.exist?(sdb)
-        v.customize ['createhd', '--filename', sdb, '--size', 1 * 1024]
-      end
-      unless File.exist?(sdc)
-        v.customize ['createhd', '--filename', sdc, '--size', 1 * 1024]
-      end
-      unless File.exist?(sdd)
-        v.customize ['createhd', '--filename', sdd, '--size', 1 * 1024]
-      end
-      v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdb]
-      v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdc]
-      v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdd]
-    end
-  end
-
-  config.vm.define "bionic", primary: true do |bionic|
-
-    # Virtualbox provider
-    bionic.vm.provider "virtualbox" do |v, override|
-      # Ubuntu Bionic 18.04
-      v.name = current_role
-      override.vm.box = "bento/ubuntu-18.04"
-      # Add extra drives
-      unless File.exist?(sdb)
-        v.customize ['createhd', '--filename', sdb, '--size', 1 * 1024]
-      end
-      unless File.exist?(sdc)
-        v.customize ['createhd', '--filename', sdc, '--size', 1 * 1024]
-      end
-      unless File.exist?(sdd)
-        v.customize ['createhd', '--filename', sdd, '--size', 1 * 1024]
-      end
-      v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdb]
-      v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdc]
-      v.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', sdd]
-    end
-  end
-
-  config.vm.define "xenial", autostart: false do |xenial|
-
-    # Virtualbox provider
-    xenial.vm.provider "virtualbox" do |v, override|
-      # Ubuntu Xenial 16.04
-      v.name = current_role
-      override.vm.box = "bento/ubuntu-16.04"
       # Add extra drives
       unless File.exist?(sdb)
         v.customize ['createhd', '--filename', sdb, '--size', 1 * 1024]
